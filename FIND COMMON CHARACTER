@@ -1,0 +1,32 @@
+//LEETCODE PROBLEM - 1002
+//LEVEL - EASY
+class Solution {
+public:
+    void fillCount(string& word, int count[26]){
+         for(char &ch :word){
+            count [ch-'a']++;//++ used for  the frequency and ch-a is used for indexing 
+         }
+}
+    vector<string> commonChars(vector<string>& words) {
+        vector<string> result;
+        int n = words.size();//it tells the size of the array
+        int count[26]={0}; //represent the frequeency of each character is 0
+        fillCount(words[0],count);
+        
+        for(int i=1;i<n;i++){ //0(n*k -evry character visit)
+             int temp[26]={0};//all character frequency is 0
+             fillCount(words[i], temp);
+             for(int j=0;j<26;j++){
+                count[j]=min(count[j],temp[j]);
+             }
+        }
+        for( int i=0;i<26;i++){
+            int c=count[i];//it will count all the value 
+            while(c--){
+                //character representing ith index- i+'a'
+                result.push_back(string(1,i+'a'));
+            }
+        }
+    return result;
+    }
+};
