@@ -1,0 +1,17 @@
+// Leetcode problem 6 - easy level 
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string a="";
+        int n=strs[0].size() ;
+        for(int i=0; i<n; i++){
+            for(auto s: strs){//to take a string from strs
+                if(s[i]!=strs[0][i]){
+                    return a;
+                }
+            }
+            a+=strs[0][i];
+        }
+        return a;
+    }
+};
