@@ -1,5 +1,6 @@
 //Leetcode problem 11
 //easy level 
+//approach 1
 
 class Solution {
 public:
@@ -26,5 +27,35 @@ public:
         }
 
         return arr1;
+    }
+};
+
+//approach 2
+
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        map<int, int >mp;//ordered map
+        //to store the frequency 
+        for(int&num:arr1){
+            mp[num]++;
+        }
+        //go through the elements of arr2
+        int i=0;
+        for ( int&num:arr2){
+            //this will tell how many times our elements will come 
+            while(mp[num]-->0){
+                arr1[i++]=num;
+            }
+        }
+        for(auto&it:mp){
+        //we have to store the frequency of all those elements which are not in arr2 but in arr1
+        int freq=it.second;
+        while (freq>0){
+            arr1[i++]=it.first;
+            freq--;
+        }
+    }
+    return arr1;
     }
 };
