@@ -1,52 +1,44 @@
 //BINARY SEARCH - SORT THE ARRAY FIRST 
 
-class Solution
-{
+class Solution {
 public:
-    bool bouquets(vector<int> &bloomDay, int m, int k, int mid)
-    {
-        int n = bloomDay.size();
-        int flower = 0;
-        int bouquet = 0;
-        for (int i = 0; i < n; i++)
-        {
-            if (bloomDay[i] <= mid) //if number is less than mid then that flower is bloomed.
-                flower++;
-            else
-                flower = 0;
-
-            if (flower >= k) //flowers are taken  to made bouq.
-            {
-                bouquet++;
-                flower = 0;
+    int getNumOfBouquets(vector<int>& bloomDay, int mid, int k) {
+        int numOfBouquets = 0;
+        int consecutive_count = 0;
+        
+        //Find count of consecutive flowers you can pick at mid day.
+        for (int i = 0; i < bloomDay.size(); i++) {
+            if (bloomDay[i] <= mid) {
+                consecutive_count++;
+            } else {
+                consecutive_count = 0;
+            }
+            if (consecutive_count == k) {
+                numOfBouquets++;
+                consecutive_count = 0;
             }
         }
-        if (bouquet >= m)
-            return true; //bouquet is made
-        return false;
+        return numOfBouquets;
     }
 
-    int minDays(vector<int> &bloomDay, int m, int k)
-    {
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int start_day = 0;
+        int end_day   = *max_element(begin(bloomDay), end(bloomDay));
 
-        int left = *min_element(bloomDay.begin(), bloomDay.end());
-        int right = *max_element(bloomDay.begin(), bloomDay.end());
-        int result = -1; //default
+        int minDays = -1;
 
-        if (bloomDay.size() < m * k)
-            return -1; //more bouquets, less flowers
+        while (start_day <= end_day) {
+            int mid = start_day + (end_day - start_day)/2;
 
-        while (left <= right)
-        {
-            int mid = (left + right) / 2;
-            if (bouquets(bloomDay, m, k, mid))
-            {
-                result = mid;
-                right = mid - 1; //check on lhs of mid
+            if (getNumOfBouquets(bloomDay, mid, k) >= m) {
+                minDays = mid;
+                end_day = mid - 1;
+            } else {
+                start_day = mid + 1;
             }
-            else
-                left = mid + 1; //check on rhs of mid
         }
-        return result;
+
+        return minDays;
     }
 };
+
