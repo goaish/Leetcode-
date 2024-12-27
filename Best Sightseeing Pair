@@ -1,3 +1,5 @@
+// C++ Solution 
+
 class Solution {
 public:
     int maxScoreSightseeingPair(vector<int>& values) {
@@ -16,3 +18,24 @@ public:
         return maxScore;
     }
 };
+
+// Java Solution 
+
+class Solution {
+    public int maxScoreSightseeingPair(int[] values) {
+        int answer = Integer.MIN_VALUE;
+        int m=values[0];
+
+        for(int i=1;i<values.length;i++){
+            if(values[i]-i+m>answer){
+                answer=values[i]-i+m;
+            }
+
+            if(values[i]+i>m){
+                m=values[i]+i;
+            }
+        }
+        return answer;
+        
+    }
+}
