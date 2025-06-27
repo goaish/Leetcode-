@@ -1,0 +1,73 @@
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    string longestSubsequenceRepeatedK(string s, int k) {
+        int n = s.length();
+        vector<int> freq_arr(26, 0);
+        for (char c : s) {
+            freq_arr[c - 'a']++;
+        }
+        
+        vector<char> avail;
+        vector<int> max_count(26, 0);
+        for (int i = 0; i < 26; i++) {
+            if (freq_arr[i] >= k) {
+                avail.push_back('a' + i);
+                max_count[i] = freq_arr[i] / k;
+            }
+        }
+        sort(avail.begin(), avail.end(), greater<char>());
+        
+        int max_len = min(n / k, 7);
+        
+        for (int L = max_len; L >= 1; L--) {
+            string current = "";
+            vector<int> cur_count(26, 0);
+            string candidate = dfs(0, current, avail, max_count, L, s, k, cur_count);
+            if (!candidate.empty()) {
+                return candidate;
+            }
+        }
+        return "";
+    }
+    
+private:
+    bool isSubsequence(const string& s, const string& t, int k) {
+        int len = t.length();
+        int total_len = len * k;
+        int j = 0;
+        for (int i = 0; i < s.length() && j < total_len; i++) {
+            if (s[i] == t[j % len]) {
+                j++;
+            }
+        }
+        return j == total_len;
+    }
+    
+    string dfs(int idx, string& current, vector<char>& avail, vector<int>& max_count, int L, const string& s, int k, vector<int>& cur_count) {
+        if (idx == L) {
+            if (isSubsequence(s, current, k)) {
+                return current;
+            }
+            return "";
+        }
+        for (char c : avail) {
+            int idx_c = c - 'a';
+            if (cur_count[idx_c] < max_count[idx_c]) {
+                current.push_back(c);
+                cur_count[idx_c]++;
+                string res = dfs(idx+1, current, avail, max_count, L, s, k, cur_count);
+                if (!res.empty()) {
+                    return res;
+                }
+                cur_count[idx_c]--;
+                current.pop_back();
+            }
+        }
+        return "";
+    }
+};
